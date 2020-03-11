@@ -16,14 +16,12 @@ void IntegerEdit::increment() {
 	if(edit < upper) {
 		edit++;
 	}
-	save();
 }
 
 void IntegerEdit::decrement() {
 	if(edit > lower){
 		edit--;
 	}
-	save();
 }
 
 void IntegerEdit::accept() {
@@ -36,7 +34,7 @@ void IntegerEdit::cancel() {
 
 
 void IntegerEdit::setFocus(bool focus) {
-	this->focus = focus;
+	return;
 }
 
 bool IntegerEdit::getFocus() {
@@ -57,36 +55,25 @@ void IntegerEdit::display() {
 void IntegerEdit::displayMan() {
 	lcd->clear();
 	lcd->setCursor(0,0);
-	focus = true;
 	char s[17];
-	if(focus) {
-		snprintf(s, 17, "Set fan: %3d %% ", edit);
-	}
-	else {
-		snprintf(s, 17, "      %4d      ", edit);
-	}
+	snprintf(s, 17, "Set fan: %3d %% ", edit);
 	lcd->print(s);
-	lcd->setCursor(0,1);
-	//lcd->print("Cur pres: %4d pA", getPressure());
-	lcd->print("Cur pres: NUM pA");
+
+	lcd->setCursor(0, 1);
+	snprintf(s, 17, "Cur pres: %4d Pa", pressure);
+	lcd->print(s);
 }
 
 void IntegerEdit::displayAuto() {
 	lcd->clear();
 	lcd->setCursor(0,0);
-	focus = true;
 	char s[17];
-	if(focus) {
-		snprintf(s, 17, "Set pres: %3d pA", edit);
-	}
-	else {
-		snprintf(s, 17, "      %3d      ", edit);
-	}
+	snprintf(s, 17, "Set pres: %3d Pa", edit);
 	lcd->print(s);
-	lcd->setCursor(0,1);
-	//lcd->print("Cur pres: %4d pA", getPressure());
-	lcd->print("Cur pres: NUM pA");
 
+	lcd->setCursor(0, 1);
+	snprintf(s, 17, "Cur pres: %4d Pa", pressure);
+	lcd->print(s);
 }
 
 
@@ -102,6 +89,5 @@ int IntegerEdit::getValue() {
 }
 
 void IntegerEdit::setValue(int value) {
-	edit = value;
-	save();
+	this->value = edit = value;
 }

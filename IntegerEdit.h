@@ -16,8 +16,8 @@ const char status[2][7] {"Auto", "Manual"};
 
 class IntegerEdit: public PropertyEdit {
 public:
-	IntegerEdit(LiquidCrystal* lcd, std::string title, int lower, int upper) : lcd(lcd), title(title), value{ lower }, edit{ lower }, focus{ false },
-	lower(lower), upper(upper) {}
+	IntegerEdit(LiquidCrystal* const lcd, std::string const title, int const lower, int const upper) : lcd(lcd), title(title), value{ lower }, edit{ lower },
+	lower(lower), upper(upper), pressure{ 0 } {}
 	virtual ~IntegerEdit();
 	void increment();
 	void decrement();
@@ -30,18 +30,20 @@ public:
 	void displayMan();
 	int getValue();
 	void setValue(int value);
-	void setCallback(void(*callback_)()) { callback = callback_; }
+	void setPressure(int pressure) {
+		this->pressure = pressure;
+	}
+
 private:
 	void save();
 	void displayEditValue();
-	LiquidCrystal *lcd;
-	std::string title;
+	LiquidCrystal* const lcd;
+	std::string const title;
 	int value;
 	int edit;
-	bool focus;
-	int lower;
-	int upper;
-	void(*callback)();
+	int const lower;
+	int const upper;
+	int pressure;
 };
 
 #endif /* INTEGEREDIT_H_ */

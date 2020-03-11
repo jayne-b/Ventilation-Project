@@ -16,7 +16,6 @@ extern std::atomic<bool> mainMenu;
 
 class PropertyEdit {
 public:
-	PropertyEdit() {};
 	virtual ~PropertyEdit() {};
 	virtual void increment() = 0;
 	virtual void decrement() = 0;

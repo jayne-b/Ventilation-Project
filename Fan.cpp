@@ -35,15 +35,21 @@ Fan::~Fan() {
 	// TODO Auto-generated destructor stub
 }
 
-bool Fan::setFrequency(uint16_t freq)
+bool Fan::setFrequency(int freq)
 {
 	int result;
 	int ctr;
 	bool atSetpoint;
-	const int delay = 500;
+	const int delay = 50;
 
 	ModbusRegister Frequency(&node, 1); // reference 1
 	ModbusRegister StatusWord(&node, 3);
+
+	freq *= 200;
+	if (freq > 20000)
+		freq = 20000;
+	else if (freq < 0)
+		freq = 0;
 
 	Frequency = freq; // set motor frequency
 
@@ -64,3 +70,8 @@ bool Fan::setFrequency(uint16_t freq)
 	return atSetpoint;
 }
 
+uint16_t Fan::getFrequency() {
+	ModbusRegister OutputFrequency{ &node, 102 };
+	auto result = static_cast<uint16_t>(OutputFrequency);
+	return result / 200;
+}

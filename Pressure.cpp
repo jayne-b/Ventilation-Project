@@ -7,7 +7,7 @@
 
 #include "Pressure.h"
 
-Pressure::Pressure(const I2C& i2c, uint8_t const i2c_address, uint8_t const i2c_read_command) : i2c{ i2c }, i2c_address{ i2c_address }, i2c_read_command{ i2c_read_command } {
+Pressure::Pressure(I2C&& i2c, uint8_t const i2c_address, uint8_t const i2c_read_command) : i2c{ i2c }, i2c_address{ i2c_address }, i2c_read_command{ i2c_read_command } {
 
 
 }

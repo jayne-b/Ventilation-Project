@@ -18,7 +18,8 @@ public:
 	Fan();
 	virtual ~Fan();
 
-	bool setFrequency(uint16_t freq);
+	bool setFrequency(int freq);
+	uint16_t getFrequency();
 private:
 	ModbusMaster node;
 };

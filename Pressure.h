@@ -12,7 +12,7 @@
 
 class Pressure {
 public:
-	Pressure(const I2C& i2c, uint8_t const i2c_address, uint8_t const i2c_read_command);
+	Pressure(I2C&& i2c, uint8_t const i2c_address, uint8_t const i2c_read_command);
 	virtual ~Pressure();
 	int getPressure();
 private:
