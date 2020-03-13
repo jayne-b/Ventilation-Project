@@ -7,7 +7,7 @@
 
 #include "ModbusRegister.h"
 
-ModbusRegister::ModbusRegister(ModbusMaster *master, int address):m(master), addr(address) {
+ModbusRegister::ModbusRegister(ModbusMaster* master, int address) : m(master), addr(address) {
 	// TODO Auto-generated constructor stub
 
 }

@@ -23,18 +23,19 @@
 #define TICKRATE_HZ 1000
 
 SimpleMenu *menu;
-std::atomic_int counter, timer;
+std::atomic_int counter, timer, timeout;
 static std::atomic<uint32_t> systicks;
 
 static IntegerEdit* fanMenu, *pressureMenu;
 
-std::atomic<bool> mode { false };		//false = auto, true = manual
+std::atomic<bool> mode { true };		//false = auto, true = manual
 std::atomic<bool> mainMenu { false };
 
 extern "C" {
 void PIN_INT0_IRQHandler(void) {
 	if (menu != nullptr) {
 		timer = 0;
+		timeout = millis();
 		menu->event(SimpleMenu::up);
 	}
 	Chip_PININT_ClearIntStatus(LPC_GPIO_PIN_INT, PININTCH(0));
@@ -44,6 +45,7 @@ void PIN_INT0_IRQHandler(void) {
 void PIN_INT1_IRQHandler(void) {
 	if (menu != nullptr) {
 		timer = 0;
+		timeout = millis();
 		menu->event(SimpleMenu::down);
 	}
 	Chip_PININT_ClearIntStatus(LPC_GPIO_PIN_INT, PININTCH(1));
@@ -54,6 +56,7 @@ void PIN_INT2_IRQHandler(void) {
 		timer = 0;
 		mainMenu = true;
 		mode = !mode;
+		timeout = millis();
 		menu->event(SimpleMenu::show);
 
 	}
@@ -77,7 +80,6 @@ void SysTick_Handler(void) {
 			menu->event(SimpleMenu::ok);
 		}
 	}
-
 	++systicks;
 }
 }
@@ -120,7 +122,7 @@ int main(void) {
 	Chip_INMUX_PinIntSel(1, 0, 10); // putting sw1 on int channel 0
 	Chip_INMUX_PinIntSel(2, 0, 16); // putting sw1 on int channel 0
 
-	/* testing */
+	// testing
 	/*Chip_INMUX_PinIntSel(0, 0, 17); // putting sw1 on int channel 0
 	Chip_INMUX_PinIntSel(1, 1, 11); // putting sw2 on int channel 0
 	Chip_INMUX_PinIntSel(2, 1, 9); // putting sw3 on int channel 0*/
@@ -163,6 +165,7 @@ int main(void) {
 	PID<int> pid(1, 0, 0.125);
 
 	while(1) {
+		auto starttime = millis();
 		auto pressure_diff = pressure.getPressure();
 		auto fanSpeed = fan.getFrequency();
 
@@ -170,13 +173,18 @@ int main(void) {
 			if (fanMenu->getValue() != fanSpeed)
 				fan.setFrequency(fanMenu->getValue());
 		} else {
-			if (abs(pressureMenu->getValue() - pressure_diff) > 2)
+			if (abs(pressureMenu->getValue() - pressure_diff) > 2){
 				fan.setFrequency(fanSpeed + pid.calculate(pressureMenu->getValue(), pressure_diff));
+			} else {
+				timeout = millis();
+			}
 		}
 
 		fanMenu->setPressure(pressure_diff);
 		pressureMenu->setPressure(pressure_diff);
-		Sleep(1000);
+		if(millis()-starttime < 1000){
+			Sleep(1000-(millis()-starttime));
+		}
 
 		menu->event(SimpleMenu::show);
 	}

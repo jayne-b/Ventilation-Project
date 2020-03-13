@@ -26,8 +26,9 @@ void SimpleMenu::event(SimpleMenu::menuEvent e) {
 
 	switch(e) {
 	case ok:
-		if(items[mode]->getFocus())
+		if(items[mode]->getFocus()){
 			items[mode]->accept();
+		}
 		break;
 
 	case back:
@@ -51,10 +52,7 @@ void SimpleMenu::event(SimpleMenu::menuEvent e) {
 	if (mainMenu)
 		items[mode]->display();
 	else {
-		if (mode)
-			items[mode]->displayMan();
-		else if (!mode)
-			items[mode]->displayAuto();
+		items[mode]->displayMenu();
 
 	}
 }

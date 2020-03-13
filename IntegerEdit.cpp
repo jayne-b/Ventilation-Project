@@ -52,29 +52,31 @@ void IntegerEdit::display() {
 	lcd->print(s);
 }
 
-void IntegerEdit::displayMan() {
+void IntegerEdit::displayMenu() {
 	lcd->clear();
 	lcd->setCursor(0,0);
 	char s[17];
-	snprintf(s, 17, "Set fan: %3d %% ", edit);
-	lcd->print(s);
+	if(mode) {
+		snprintf(s, 17, "Set fan: %3d %% ", edit);
+		lcd->print(s);
+	} else {
+		snprintf(s, 17, "Set pres: %3d Pa", edit);
+		lcd->print(s);
+	}
 
 	lcd->setCursor(0, 1);
-	snprintf(s, 17, "Cur pres: %4d Pa", pressure);
+	snprintf(s, 17, "Cur pres: %3d Pa", pressure);
 	lcd->print(s);
+	if ((millis() - timeout) > 10000 && !mode){
+		lcd->clear();
+		lcd->setCursor(0, 0);
+		lcd->print("Error: Pressure");
+		lcd->setCursor(0, 1);
+		lcd->print("Not Reachable");
+	}
 }
 
-void IntegerEdit::displayAuto() {
-	lcd->clear();
-	lcd->setCursor(0,0);
-	char s[17];
-	snprintf(s, 17, "Set pres: %3d Pa", edit);
-	lcd->print(s);
 
-	lcd->setCursor(0, 1);
-	snprintf(s, 17, "Cur pres: %4d Pa", pressure);
-	lcd->print(s);
-}
 
 
 void IntegerEdit::save() {

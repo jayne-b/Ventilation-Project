@@ -9,10 +9,11 @@
 #define PROPERTYEDIT_H_
 #include <atomic>
 
-extern std::atomic_int counter, timer;
+extern std::atomic_int counter, timer, timeout;
 extern std::atomic<bool> mode;		//false - manual mode, true - auto mode
 extern std::atomic<bool> mainMenu;
 
+uint32_t millis();
 
 class PropertyEdit {
 public:
@@ -24,8 +25,7 @@ public:
 	virtual void setFocus(bool focus) = 0;
 	virtual bool getFocus() = 0;
 	virtual void display() = 0;
-	virtual void displayAuto() = 0;
-	virtual void displayMan() = 0;
+	virtual void displayMenu() = 0;
 };
 
 #endif /* PROPERTYEDIT_H_ */

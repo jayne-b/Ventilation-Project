@@ -13,7 +13,7 @@
 DigitalIoPin::DigitalIoPin(int port, int pin, bool input, bool pullup, bool invert) :
 port{port}, pin{pin}, input{input}, pullup{pullup}, invert{invert} {
 
-	LPC_IOCON->PIO[port][pin] = (1U + pullup) << 3) | 1U << 7 | invert << 6);
+	LPC_IOCON->PIO[port][pin] = (1U + pullup) << 3 | 1U << 7 | invert << 6;
 
 	if(input){
 		Chip_GPIO_SetPinDIRInput(LPC_GPIO, port, pin);

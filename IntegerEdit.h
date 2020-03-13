@@ -26,8 +26,7 @@ public:
 	void setFocus(bool focus);
 	bool getFocus();
 	void display();
-	void displayAuto();
-	void displayMan();
+	void displayMenu();
 	int getValue();
 	void setValue(int value);
 	void setPressure(int pressure) {

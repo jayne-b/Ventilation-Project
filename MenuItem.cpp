@@ -42,10 +42,7 @@ bool MenuItem::event(menuEvent e) {
 	if (mainMenu)
 		pe->display();
 	else {
-		if (handled && mode)
-			pe->displayAuto();
-		else if (handled && !mode)
-			pe->displayMan();
+		pe->displayMenu();
 	}
 
 	return handled;
